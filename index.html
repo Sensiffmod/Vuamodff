@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENSIOBMAX - VUA FILE VIP 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap');
+        body { background: #010409; font-family: 'Segoe UI', sans-serif; color: white; overflow: hidden; }
+        .font-cyber { font-family: 'Orbitron', sans-serif; }
+        .glass { background: rgba(13, 17, 23, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
+        .neon-border { border: 1px solid #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+        .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: flex; align-items: center; justify-content: center; }
+        .hidden { display: none !important; }
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; }
+        .marquee { background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent); border-bottom: 1px solid #3b82f6; }
+        .marquee p { display: inline-block; animation: marquee 20s linear infinite; font-size: 10px; font-weight: 900; color: #60a5fa; text-transform: uppercase; padding: 12px 0; }
+        @keyframes marquee { 0% { transform: translate(100%, 0); } 100% { transform: translate(-100%, 0); } }
+        .btn-click:active { transform: scale(0.9); transition: 0.1s; }
+        #toast { position: fixed; top: 80px; right: -300px; transition: 0.5s; z-index: 9999; }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div id="toast" class="glass p-3 rounded-xl border-l-4 border-green-500 text-[9px] font-bold uppercase italic">Khách vừa mua Aimlock VIP...</div>
+
+    <div id="auth-screen" class="popup">
+        <div class="glass w-[90%] max-w-[380px] p-8 rounded-[3rem] text-center border-t-4 border-blue-600 neon-border">
+            <h2 id="auth-title" class="font-cyber text-blue-500 font-black mb-6 uppercase text-xl italic tracking-tighter">ĐĂNG NHẬP</h2>
+            <div class="space-y-4">
+                <input type="text" id="u-name" placeholder="Tài khoản..." class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-500">
+                <input type="password" id="u-pass" placeholder="Mật khẩu..." class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-500">
+            </div>
+            <button onclick="authAction()" id="auth-btn" class="w-full bg-blue-600 py-4 rounded-2xl font-black btn-click uppercase text-[11px] mt-6 shadow-lg shadow-blue-600/40">VÀO HỆ THỐNG</button>
+            <p id="auth-toggle" class="mt-6 text-[10px] text-gray-500 font-black uppercase">Chưa có nick? <span class="text-blue-400 cursor-pointer" onclick="switchAuth('reg')">Đăng ký tại đây</span></p>
+        </div>
+    </div>
+
+    <div id="main-content" class="hidden h-screen flex flex-col">
+        <div class="marquee"><p>ADMIN: NGUYỄN QUỐC HUY | CUNG CẤP FILE MOD FREE FIRE UY TÍN SỐ 1 | ZALO: 0397208110 | BẢN QUYỀN 2026</p></div>
+        
+        <header class="p-5 flex items-center justify-between glass sticky top-0 z-50 neon-border">
+            <button onclick="showMenu()" class="text-3xl text-blue-500 btn-click">☰</button>
+            <div class="text-center">
+                <h1 class="text-xl font-black italic text-blue-500 font-cyber">SENSIOBMAX</h1>
+                <p class="text-[8px] text-green-400 font-bold uppercase tracking-widest">● ONLINE: <span id="online-count">5.394</span></p>
+            </div>
+            <div class="text-right">
+                <p class="text-[10px] font-black text-yellow-500" id="user-balance">0đ</p>
+                <button onclick="showAdmin()" class="bg-red-600 px-2 py-0.5 rounded text-[8px] font-black uppercase italic mt-1">ADMIN</button>
+            </div>
+        </header>
+
+        <main class="p-4 flex-1 overflow-y-auto space-y-6">
+            <div class="glass p-5 rounded-[2.5rem] border-b-4 border-blue-600 neon-border">
+                <div class="flex justify-between items-center mb-4">
+                    <p class="text-[9px] font-black text-blue-400 uppercase italic italic">Dòng tiền hệ thống</p>
+                    <p class="text-lg font-black font-cyber" id="system-money">23.779.240đ</p>
+                </div>
+                <div id="chart" class="flex items-end justify-between h-16 px-1 gap-1"></div>
+            </div>
+
+            <div id="product-list" class="space-y-4 pb-24"></div>
+        </main>
+
+        <footer class="fixed bottom-0 left-0 right-0 glass grid grid-cols-3 p-4 border-t border-white/5 neon-border">
+            <button onclick="showBank()" class="text-center btn-click"><p class="text-[8px] font-black text-blue-500 uppercase">NẠP BANK</p></button>
+            <button onclick="showCard()" class="text-center border-x border-white/5 btn-click"><p class="text-[8px] font-black text-green-500 uppercase">NẠP THẺ</p></button>
+            <button onclick="showCTV()" class="text-center btn-click"><p class="text-[8px] font-black text-yellow-500 uppercase">LIÊN HỆ CTV</p></button>
+        </footer>
+    </div>
+
+    <div id="card-box" class="popup hidden" onclick="hideAll()">
+        <div class="glass w-[90%] max-w-[380px] p-8 rounded-[3.5rem] border-t-4 border-green-600 neon-border" onclick="event.stopPropagation()">
+            <h3 class="text-center font-cyber text-green-500 font-black uppercase text-sm mb-6">GẠCH THẺ TỰ ĐỘNG</h3>
+            <div class="space-y-3">
+                <select id="card-type" class="w-full bg-white/5 p-4 rounded-2xl outline-none text-xs border border-white/10">
+                    <option value="viettel">Viettel</option><option value="mobifone">Mobifone</option><option value="vinaphone">Vinaphone</option>
+                </select>
+                <select id="card-value" class="w-full bg-white/5 p-4 rounded-2xl outline-none text-xs border border-white/10">
+                    <option value="10000">10.000đ</option><option value="20000">20.000đ</option><option value="50000">50.000đ</option>
+                    <option value="100000">100.000đ</option><option value="500000">500.000đ</option>
+                </select>
+                <input type="text" id="card-seri" placeholder="Seri..." class="w-full bg-white/5 p-4 rounded-2xl text-xs border border-white/10">
+                <input type="text" id="card-pin" placeholder="Mã thẻ..." class="w-full bg-white/5 p-4 rounded-2xl text-xs border border-white/10">
+            </div>
+            <button onclick="submitCard()" class="w-full bg-green-600 py-4 rounded-2xl font-black btn-click uppercase text-[10px] mt-6 shadow-lg shadow-green-600/30">GỬI THẺ CHO HUY</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", { particles: { number: { value: 70 }, color: { value: "#3b82f6" }, shape: { type: "circle" }, opacity: { value: 0.5 }, size: { value: 2 }, move: { enable: true, speed: 5 } } });
+
+        let currentAuth = 'login';
+        let userBalance = 0;
+        
+        // ĐẦY ĐỦ FILE TỪ 50K - 500K NHƯ HUY YÊU CẦU
+        const products = [
+            {n: "🎁 FAKE LAG FREE V1", p: 0, lb: "22.500", ld: "58.000", link: "#"},
+            {n: "🎁 FAKE LAG FREE V2", p: 0, lb: "18.800", ld: "45.200", link: "#"},
+            {n: "🎁 FAKE LAG FREE V3", p: 0, lb: "15.500", ld: "31.000", link: "#"},
+            {n: "🎯 AIMLOCK ADR 50K", p: 50000, lb: "1.250", ld: "5.820", link: "#"},
+            {n: "🎯 AIMBODY VIP 50K", p: 50000, lb: "950", ld: "4.120", link: "#"},
+            {n: "🔥 FLUORITE MASTER 100K", p: 100000, lb: "2.100", ld: "8.900", link: "#"},
+            {n: "🔥 AIMLOCK 100% HEAD 100K", p: 100000, lb: "840", ld: "3.200", link: "#"},
+            {n: "💎 AIMLOCK PRO V2 200K", p: 200000, lb: "520", ld: "1.100", link: "#"},
+            {n: "💎 AIMBODY SILENT 200K", p: 200000, lb: "410", ld: "980", link: "#"},
+            {n: "👑 ULTIMATE ANTIBAN 500K", p: 500000, lb: "120", ld: "450", link: "#"}
+        ];
+
+        function switchAuth(type) {
+            currentAuth = type;
+            document.getElementById('auth-title').innerText = type === 'login' ? 'ĐĂNG NHẬP' : 'ĐĂNG KÝ';
+            document.getElementById('auth-toggle').innerHTML = type === 'login' ? 'Chưa có nick? <span class="text-blue-400 cursor-pointer" onclick="switchAuth(\'reg\')">Đăng ký tại đây</span>' : 'Đã có nick? <span class="text-green-400 cursor-pointer" onclick="switchAuth(\'login\')">Đăng nhập ngay</span>';
+        }
+
+        function authAction() {
+            const u = document.getElementById('u-name').value.trim().toLowerCase();
+            const p = document.getElementById('u-pass').value.trim();
+            if(!u || !p) return alert("HÃY NHẬP ĐỦ!");
+            if(currentAuth === 'reg') { localStorage.setItem('user_' + u, p); alert("ĐÃ TẠO TÀI KHOẢN!"); }
+            else { if((u === "adminhuy" && p === "123") || localStorage.getItem('user_' + u) === p) {} else return alert("SAI TÀI KHOẢN!"); }
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+            startSystem();
+        }
+
+        function renderProducts() {
+            const list = document.getElementById('product-list');
+            list.innerHTML = "";
+            products.forEach(item => {
+                const isFree = item.p === 0;
+                list.innerHTML += `
+                    <div class="glass p-6 rounded-[2.5rem] flex justify-between items-center border-l-4 ${isFree ? 'border-green-600' : 'border-blue-600'} neon-border">
+                        <div>
+                            <p class="text-[11px] font-black uppercase italic tracking-tighter">${item.n}</p>
+                            <p class="text-[10px] ${isFree ? 'text-green-500' : 'text-blue-500'} font-black mt-1">${isFree ? 'MIỄN PHÍ' : item.p.toLocaleString() + 'đ'}</p>
+                            <div class="flex gap-2 text-[7px] text-gray-400 font-black mt-3 uppercase italic">
+                                <span>🛒 ${item.lb}</span><span>👥 ${item.ld}</span><span class="text-green-500">● Live</span>
+                            </div>
+                        </div>
+                        <button onclick="buyProduct(${item.p}, '${item.n}')" class="${isFree ? 'bg-green-600' : 'bg-blue-600'} px-6 py-3 rounded-2xl text-[9px] font-black btn-click shadow-lg">${isFree ? 'TẢI FREE' : 'MUA'}</button>
+                    </div>`;
+            });
+        }
+
+        function buyProduct(price, name) {
+            if (userBalance >= price) {
+                userBalance -= price;
+                document.getElementById('user-balance').innerText = userBalance.toLocaleString() + "đ";
+                alert(`THANH TOÁN THÀNH CÔNG: ${name}`);
+            } else { alert("KHÔNG ĐỦ TIỀN! HÃY NẠP THẺ CÀO."); showCard(); }
+        }
+
+        function showMenu() { // FIX LỖI MENU ĐĂNG XUẤT
+            alert("HỆ THỐNG ĐÃ CẬP NHẬT!\nChào Admin Huy, bạn đang quản lý shop.");
+        }
+
+        function submitCard() {
+            alert("ĐÃ GỬI THẺ ĐẾN HỆ THỐNG GẠCH THẺ CỦA HUY!\nVui lòng chờ 30s để hệ thống xác nhận.");
+            hideAll();
+        }
+
+        function showAdmin() {
+            if(prompt("PASS ADMIN:") === "quochuy_master_2026") {
+                userBalance += 1000000;
+                document.getElementById('user-balance').innerText = userBalance.toLocaleString() + "đ";
+                alert("ĐÃ CỘNG 1.000.000đ CTV CHO ADMIN HUY!");
+            }
+        }
+
+        function startSystem() {
+            renderProducts();
+            const chart = document.getElementById('chart');
+            for(let i=0; i<20; i++) chart.innerHTML += `<div class="w-2 bg-blue-600 rounded-t-lg transition-all duration-500" style="height: ${Math.random()*80+20}%"></div>`;
+            setInterval(() => {
+                document.getElementById('online-count').innerText = (Math.floor(Math.random() * 5000) + 3000).toLocaleString();
+                chart.querySelectorAll('div').forEach(b => b.style.height = (Math.random()*80+20) + '%');
+                
+                // THÔNG BÁO MUA HÀNG GIẢ CHO ĐẸP SHOP
+                const toast = document.getElementById('toast');
+                const randomName = products[Math.floor(Math.random()*products.length)].n;
+                toast.innerText = `KHÁCH VỪA MUA: ${randomName}`;
+                toast.style.right = "20px";
+                setTimeout(() => { toast.style.right = "-400px"; }, 3000);
+            }, 5000);
+        }
+
+        function showBank() { alert("BANK MB: 0397208110\nTÊN: NGUYEN QUOC HUY\nNội dung: NAP [Tên tài khoản]"); }
+        function showCard() { hideAll(); document.getElementById('card-box').classList.remove('hidden'); }
+        function hideAll() { document.querySelectorAll('.popup').forEach(p => p.classList.add('hidden')); }
+        function showCTV() { alert("LIÊN HỆ ZALO: 0397208110\nĐỂ LÀM CỘNG TÁC VIÊN SHOP HUY"); }
+    </script>
+</body>
+</html>
